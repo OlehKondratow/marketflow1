@@ -4,7 +4,6 @@
 .cred.md
 *.tfstate
 *.tfstate.*
-terraform.tfvars
 *.auto.tfvars
 .terraform/
 .terraform.lock.hcl
