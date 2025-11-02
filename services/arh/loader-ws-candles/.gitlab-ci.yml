@@ -1,0 +1,46 @@
+include:
+  - project: 'kinga/stream-forge'
+    ref: main
+    file: '/.gitlab/ci-templates/Python-Service.gitlab-ci.yml'
+  - project: 'kinga/stream-forge'
+    ref: main
+    file: '/.gitlab/ci-templates/Kubernetes-Deploy.gitlab-ci.yml'
+
+test-loader-ws-candles:
+  extends: .test_python_service
+  variables:
+    SERVICE_PATH: services/loader-ws-candles
+  when: manual
+
+build-loader-ws-candles:
+  extends: .build_python_service
+  needs:
+    - test-loader-ws-candles
+  variables:
+    SERVICE_NAME: loader-ws-candles
+    SERVICE_PATH: services/loader-ws-candles
+    CI_REGISTRY_IMAGE: $CI_REGISTRY/kinga/stream-forge/loader-ws-candles
+
+integration-test-loader-ws-candles:
+  extends: .integration_test_python_service
+  needs:
+    - build-loader-ws-candles
+  variables:
+    SERVICE_NAME: loader-ws-candles
+    SERVICE_PATH: services/loader-ws-candles
+  when: manual # Make it manual for now, user can change later
+
+deploy-loader-ws-candles:
+  extends: .deploy_kubernetes_service
+  needs:
+    - integration-test-loader-ws-candles
+  variables:
+    K8S_MANIFEST_PATH: services/loader-ws-candles/k8s/loader-ws-candles-deployment.yaml
+
+update-badge-loader-ws-candles:
+  extends: .update_badge_python_service
+  needs:
+    - deploy-loader-ws-candles
+  variables:
+    SERVICE_NAME: loader-ws-candles
+    SERVICE_PATH: services/loader-ws-candles

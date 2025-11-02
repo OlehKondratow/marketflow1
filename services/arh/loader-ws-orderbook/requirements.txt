@@ -1,0 +1,7 @@
+uvloop
+fastapi
+loguru
+python-dotenv
+aiokafka
+prometheus-client
+websockets

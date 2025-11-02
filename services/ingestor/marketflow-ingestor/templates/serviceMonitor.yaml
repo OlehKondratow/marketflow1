@@ -1,0 +1,19 @@
+{{- if .Values.serviceMonitor.enabled }}
+{{- range $index, $symbol := .Values.symbols }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: marketflow-ingestor-{{ $symbol }}
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: marketflow-ingestor-{{ $symbol }}
+  endpoints:
+    - port: metrics
+      interval: 15s
+      path: /metrics
+---
+{{- end }}
+{{- end }}

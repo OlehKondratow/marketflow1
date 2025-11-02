@@ -1,0 +1,71 @@
+{{- $fullName := include "marketflow-ingestor.fullname" . -}}
+{{- $image := printf "%s:%s" .Values.image.repository .Values.image.tag -}}
+
+{{- range $index, $symbol := .Values.symbols }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}-{{ $symbol }}
+  labels:
+    app.kubernetes.io/name: marketflow-ingestor
+    app.kubernetes.io/component: {{ $symbol }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ $fullName }}-{{ $symbol }}
+  template:
+    metadata:
+      labels:
+        app: {{ $fullName }}-{{ $symbol }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ add $.Values.env.PROM_PORT_BASE $index }}"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: default
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: kafka-connection-spc
+      containers:
+        - name: ingestor
+          image: {{ $image }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ add $.Values.env.PROM_PORT_BASE $index }}
+              name: metrics
+          env:
+            - name: SYMBOLS
+              value: "{{ $symbol }}"
+            - name: KAFKA_BROKER
+              value: "{{ $.Values.env.KAFKA_BROKER }}"
+            - name: KAFKA_TOPIC
+              value: "{{ $.Values.env.KAFKA_TOPIC }}"
+            - name: KAFKA_USERNAME
+              value: "$ConnectionString"
+            - name: KAFKA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-connection
+                  key: password
+            - name: SECURITY_PROTOCOL
+              value: "SASL_SSL"
+            - name: SASL_MECHANISM
+              value: "PLAIN"
+            - name: PROM_PORT
+              value: "{{ add $.Values.env.PROM_PORT_BASE $index }}"
+#          envFrom:
+#            - secretRef:
+#                name: kafka-connection
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+          resources:
+{{ toYaml $.Values.resources | indent 12 }}
+---
+{{- end }}

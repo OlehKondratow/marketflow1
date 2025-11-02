@@ -1,0 +1,16 @@
+{{- range $index, $symbol := .Values.symbols }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: marketflow-ingestor-{{ $symbol }}
+  labels:
+    app: marketflow-ingestor-{{ $symbol }}
+spec:
+  ports:
+    - name: metrics
+      port: {{ add $.Values.env.PROM_PORT_BASE $index }}
+      targetPort: {{ add $.Values.env.PROM_PORT_BASE $index }}
+  selector:
+    app: marketflow-ingestor-{{ $symbol }}
+---
+{{- end }}

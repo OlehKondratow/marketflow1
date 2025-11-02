@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-to-vnet
+  namespace: marketflow-dev
+spec:
+  podSelector: {}
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-dev
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 10.240.0.0/16
+  policyTypes:
+  - Ingress
+  - Egress

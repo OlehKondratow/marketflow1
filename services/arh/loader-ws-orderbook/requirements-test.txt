@@ -1,0 +1,9 @@
+# Test-only dependencies for loader-ws-orderbook
+pytest
+pytest-asyncio
+httpx
+
+# Coverage / JSON reporters for quality badges
+pytest-cov
+pytest-json-report
+pytest-xdist

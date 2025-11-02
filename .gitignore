@@ -1,0 +1,26 @@
+# Terraform
+/docs
+.cred
+.cred.md
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.auto.tfvars
+.terraform/
+.terraform.lock.hcl
+tfplan
+
+
+k8s/alloy.sh
+
+docs/14-deploy_secret.md
+
+step-by-step_backup.md
+
+step-by-step.md 
+services/ingestor/.env
+
+# IDE / cache
+.vscode/
+.idea/
+__pycache__/

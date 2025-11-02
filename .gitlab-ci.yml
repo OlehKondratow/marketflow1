@@ -1,0 +1,29 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE: "$ACR_LOGIN_SERVER/streamforge/marketflow:$CI_COMMIT_SHORT_SHA"
+  DOCKER_IMAGE: $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+
+build:
+  stage: build
+  tags:
+    - mworker1
+  script:
+    - mkdir -p ~/.docker
+    - echo "$DOCKER_CONFIG_JSON_B64" | base64 -d > ~/.docker/config.json
+    - docker build -t $DOCKER_IMAGE .
+    - docker push $DOCKER_IMAGE
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  image: registry.dmz.home/infra-a-cod/test/tools/k8s-dev-tools:v1.0.0
+  tags:
+    - mworker1
+  script:
+    - mkdir -p ~/.kube
+    - echo "$KUBECONFIG_B64" | base64 -d > ~/.kube/config
+    - kubectl get nodes

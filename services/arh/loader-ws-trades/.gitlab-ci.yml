@@ -1,0 +1,47 @@
+include:
+  - project: 'kinga/stream-forge'
+    ref: main
+    file: '/.gitlab/ci-templates/Python-Service.gitlab-ci.yml'
+  - project: 'kinga/stream-forge'
+    ref: main
+    file: '/.gitlab/ci-templates/Kubernetes-Deploy.gitlab-ci.yml'
+
+build-loader-ws-trades:
+  extends: .build_python_service
+  needs:
+    - test-loader-ws-trades
+  variables:
+    SERVICE_NAME: loader-ws-trades
+    SERVICE_PATH: services/loader-ws-trades
+    CI_REGISTRY_IMAGE: $CI_REGISTRY/kinga/stream-forge/loader-ws-trades
+
+
+integration-test-loader-ws-trades:
+  extends: .integration_test_python_service
+  needs:
+    - build-loader-ws-trades
+  variables:
+    SERVICE_NAME: loader-ws-trades
+    SERVICE_PATH: services/loader-ws-trades
+  when: manual # Make it manual for now, user can change later
+
+test-loader-ws-trades:
+  extends: .test_python_service
+  variables:
+    SERVICE_PATH: services/loader-ws-trades
+  when: manual
+
+deploy-loader-ws-trades:
+  extends: .deploy_kubernetes_service
+  needs:
+    - integration-test-loader-ws-trades
+  variables:
+    K8S_MANIFEST_PATH: services/loader-ws-trades/k8s/loader-ws-trades-deployment.yaml
+
+update-badge-loader-ws-trades:
+  extends: .update_badge_python_service
+  needs:
+    - deploy-loader-ws-trades
+  variables:
+    SERVICE_NAME: loader-ws-trades
+    SERVICE_PATH: services/loader-ws-trades

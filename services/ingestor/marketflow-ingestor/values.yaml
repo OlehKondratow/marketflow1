@@ -1,0 +1,29 @@
+image:
+  repository: marketflowregistry.azurecr.io/ingestor
+  tag: v0.0.5
+  pullPolicy: IfNotPresent
+
+symbols:
+  - btcusdt
+  - ethusdt
+  - solusdt
+
+env:
+  KAFKA_BROKER: "marketflow-kafka-ns.servicebus.windows.net:9093"
+  KAFKA_TOPIC: "ohlcv_raw"
+  KAFKA_USERNAME: "$ConnectionString"
+  KEYVAULT_NAME: "marketflow-vault"
+  SECRET_NAME: "KafkaConnectionString"
+  SECRET_KEY: "password"
+  PROM_PORT_BASE: 8000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+serviceMonitor:
+  enabled: false

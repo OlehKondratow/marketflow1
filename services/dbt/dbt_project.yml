@@ -1,0 +1,18 @@
+name: 'marketflow'
+version: '1.0'
+config-version: 2
+
+profile: 'marketflow'
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+
+models:
+  marketflow:
+    +materialized: incremental
+    staging:
+      +schema: staging
+      +materialized: view
+    analytics:
+      +schema: analytics
+      +materialized: table
