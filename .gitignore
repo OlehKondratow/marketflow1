@@ -1,5 +1,4 @@
 # Terraform
-/docs
 .cred
 .cred.md
 *.tfstate
