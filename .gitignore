@@ -7,8 +7,8 @@
 .terraform/
 .terraform.lock.hcl
 tfplan
-
-
+docs/23.1-alloy.md
+infra/env/core/phase1-core/.readme.md
 k8s/alloy.sh
 
 docs/14-deploy_secret.md

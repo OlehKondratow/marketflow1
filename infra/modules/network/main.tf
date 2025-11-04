@@ -109,3 +109,33 @@ resource "azurerm_subnet_network_security_group_association" "dev_nsg_assoc" {
   subnet_id                 = azurerm_subnet.subnet_dev.id
   network_security_group_id = azurerm_network_security_group.dev_nsg.id
 }
+
+##############################################################
+# 🌐 Public IPs
+##############################################################
+
+resource "azurerm_public_ip" "prod_pip" {
+  name                = "${var.project_name}-prod-pip"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+
+  tags = {
+    environment = "prod"
+    project     = var.project_name
+  }
+}
+
+resource "azurerm_public_ip" "dev_pip" {
+  name                = "${var.project_name}-dev-pip"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+
+  tags = {
+    environment = "dev"
+    project     = var.project_name
+  }
+}

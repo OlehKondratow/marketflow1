@@ -15,3 +15,8 @@ output "eventhub_namespace_id" {
   description = "Event Hub Namespace ID"
 }
 
+output "eventhub_namespace_primary_connection_string" {
+  value       = azurerm_eventhub_namespace.main.default_primary_connection_string
+  description = "Primary connection string for the Event Hub Namespace"
+}
+

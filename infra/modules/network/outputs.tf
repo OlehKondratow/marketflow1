@@ -83,3 +83,13 @@ output "subnet_names" {
   }
   description = "Names of subnets"
 }
+
+output "public_ip_dev" {
+  value = azurerm_public_ip.dev_pip.ip_address
+  description = "Public IP address for dev environment"
+}
+
+output "public_ip_prod" {
+  value = azurerm_public_ip.prod_pip.ip_address
+  description = "Public IP address for prod environment"
+}
