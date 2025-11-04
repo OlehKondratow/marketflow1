@@ -1,35 +1,34 @@
-####################################
-# phase3-roles variables
-####################################
+###########################################################################
+# Variables for Phase 3 – Role Assignments
+###########################################################################
 
 variable "subscription_id" {
-  description = "Azure subscription ID."
+  description = "Azure Subscription ID"
   type        = string
 }
 
 variable "tenant_id" {
-  description = "Azure Active Directory tenant ID."
+  description = "Azure Tenant ID"
   type        = string
 }
 
 variable "resource_group_id" {
-  description = "Resource group ID where role assignments will be created."
-  type        = string
-}
-
-variable "acr_id" {
-  description = "Resource ID of the Azure Container Registry."
+  description = "ID группы ресурсов для назначения ролей"
   type        = string
 }
 
 variable "keyvault_id" {
-  description = "Resource ID of the Key Vault."
+  description = "ID Key Vault для назначения роли Secrets Officer"
+  type        = string
+}
+
+variable "acr_id" {
+  description = "ID Azure Container Registry для назначения роли AcrPull"
   type        = string
 }
 
 variable "aks_principal_id" {
-  description = "The managed identity principal ID of the AKS cluster.  If omitted, the value will be read from the phase2 state file via terraform_remote_state."
+  description = "Principal ID управляемой идентичности AKS (если не передаётся — будет взят из remote_state)"
   type        = string
   default     = ""
 }
-
