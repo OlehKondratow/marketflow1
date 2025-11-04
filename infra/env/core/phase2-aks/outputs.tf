@@ -34,3 +34,7 @@ output "aks_principal_id" {
   value       = azurerm_kubernetes_cluster.aks.identity[0].principal_id
 }
 
+output "aks_resource_group_name" {
+  description = "Resource group of the AKS cluster"
+  value       = azurerm_kubernetes_cluster.aks.resource_group_name
+}

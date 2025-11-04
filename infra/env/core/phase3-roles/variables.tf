@@ -1,5 +1,5 @@
 ###########################################################################
-# Variables for Phase 3 – Role Assignments
+# Input variables for Phase 3
 ###########################################################################
 
 variable "subscription_id" {
@@ -13,22 +13,22 @@ variable "tenant_id" {
 }
 
 variable "resource_group_id" {
-  description = "ID группы ресурсов для назначения ролей"
+  description = "ID группы ресурсов, где будет назначена роль Network Contributor"
   type        = string
 }
 
 variable "keyvault_id" {
-  description = "ID Key Vault для назначения роли Secrets Officer"
+  description = "ID Key Vault, где будет назначена роль Key Vault Secrets Officer"
   type        = string
 }
 
 variable "acr_id" {
-  description = "ID Azure Container Registry для назначения роли AcrPull"
+  description = "ID Azure Container Registry, где будет назначена роль AcrPull"
   type        = string
 }
 
 variable "aks_principal_id" {
-  description = "Principal ID управляемой идентичности AKS (если не передаётся — будет взят из remote_state)"
+  description = "Principal ID управляемой идентичности AKS (если не задан — берётся из состояния фазы 2)"
   type        = string
   default     = ""
 }

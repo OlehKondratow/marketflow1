@@ -1,6 +1,10 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# Чтение principal ID из состояния фазы 2 (phase2-aks)
-# ─────────────────────────────────────────────────────────────────────────────
+###########################################################################
+# Phase 3: Role assignments for AKS managed identity
+#
+# Назначает RBAC-роли (Network Contributor, Key Vault Secrets Officer, AcrPull)
+# для управляемой идентичности кластера AKS.
+###########################################################################
+
 data "terraform_remote_state" "phase2_aks" {
   backend = "local"
   config = {
@@ -16,7 +20,6 @@ locals {
   )
 }
 
-
 # ─────────────────────────────────────────────────────────────────────────────
 # Вызов модуля role_assignments
 # ─────────────────────────────────────────────────────────────────────────────
@@ -29,17 +32,3 @@ module "role_assignments" {
   acr_id            = var.acr_id
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Outputs
-# ─────────────────────────────────────────────────────────────────────────────
-output "network_role_id" {
-  value = module.role_assignments.network_role_id
-}
-
-output "keyvault_role_id" {
-  value = module.role_assignments.keyvault_role_id
-}
-
-output "acr_role_id" {
-  value = module.role_assignments.acr_role_id
-}

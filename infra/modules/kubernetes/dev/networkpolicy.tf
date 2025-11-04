@@ -75,8 +75,7 @@ resource "kubernetes_network_policy_v1" "keda_allow_egress" {
     pod_selector {}
     policy_types = ["Egress"]
     egress {
-      # Allow all outbound traffic
-      to = [{}]
+      to {}
     }
   }
 }
@@ -102,7 +101,7 @@ resource "kubernetes_network_policy_v1" "keda_allow_metrics_ingress" {
       # Allow ingress from any pod in any namespace. This is a simple way
       # to ensure the control plane components can reach the metrics server.
       from {
-        namespace_selector = {}
+        namespace_selector {}
       }
     }
   }

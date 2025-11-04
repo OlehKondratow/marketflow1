@@ -9,4 +9,4 @@ acr_id            = "/subscriptions/65fe7e97-9f6f-4f82-b940-4f374ca027cb/resourc
 
 # ID управляемой идентичности AKS — требуется только для первого запуска,
 # затем можно читать его из terraform_remote_state
-aks_principal_id  = "26b1e94f-15a7-4f3f-bdb5-98ddbc40a8dd"
+aks_principal_id = "26b1e94f-15a7-4f3f-bdb5-98ddbc40a8dd"

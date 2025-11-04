@@ -1,25 +1,13 @@
-terraform {
-  required_providers {
-    azurerm    = { source = "hashicorp/azurerm",    version = "~> 3.0" }
-    kubernetes = { source = "hashicorp/kubernetes", version = "~> 2.0" }
-    helm       = { source = "hashicorp/helm",       version = "~> 2.0" }
-  }
-}
-
-###########################################################################
-# Phase 4: Kubernetes add-ons and namespaces
-#
-# Деплой ingress‑контроллеров, cert-manager и неймспейсов dev/prod.
-# К kubeconfig подключаемся, читая `aks_kube_admin_config` из state
-# phase2-aks. Это позволяет автоматически конфигурировать кластер, не
-# передавая креденшелы вручную.
-###########################################################################
 
 data "terraform_remote_state" "phase2_aks" {
   backend = "local"
   config = {
     path = "../phase2-aks/terraform.tfstate"
   }
+}
+
+locals {
+  kube = data.terraform_remote_state.phase2_aks.outputs.aks_kube_admin_config
 }
 
 locals {
@@ -30,7 +18,7 @@ locals {
 }
 
 module "kubernetes_dev" {
-  source  = "../modules/kubernetes/dev"
+  source  = "../../../modules/kubernetes/dev"
 
   resource_group_name = var.resource_group_name
   dev_ingress_ip      = var.dev_ingress_ip
@@ -42,7 +30,7 @@ module "kubernetes_dev" {
 }
 
 module "kubernetes_prod" {
-  source = "../modules/kubernetes/prod"
+  source = "../../../modules/kubernetes/prod"
 
   resource_group_name  = var.resource_group_name
   prod_ingress_ip      = var.prod_ingress_ip
